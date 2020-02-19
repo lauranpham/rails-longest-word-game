@@ -4,18 +4,19 @@ require 'open-uri'
 class GamesController < ApplicationController
   def new
     @letters = []
-    10.times { @letters << ('A'..'Z').to_a[rand(26)] }
+    6.times { @letters << ('A'..'Z').to_a[rand(26)] }
+    4.times { @letters << ['A', 'E', 'I', 'O', 'U'].sample(1).first }
   end
 
   def score
-    @attempt = params[:attempt].chars
+    @attempt = params[:attempt].upcase.chars
     @letters = params[:letters].chars
     if in_grid?(@attempt, @letters) && english?(@attempt)
-      @result = "Congratulations! #{@attempt.join} is a valid English word"
+      @result = "Congratulations! `#{@attempt.join.capitalize}` is a valid English word"
     elsif !in_grid?(@attempt, @letters)
-      @result = "Sorry but #{@attempt.join} can't be built out of #{@letters.join}"
+      @result = "Sorry but `#{@attempt.join.capitalize}` can't be built out of #{@letters.join}"
     else
-      @result = "Sorry but #{@attempt.join} does not seem to be a valid English word.."
+      @result = "Sorry but `#{@attempt.join.capitalize}` does not seem to be a valid English word.."
     end
   end
 
